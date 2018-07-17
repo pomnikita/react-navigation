@@ -23,6 +23,8 @@ import { NavigationProvider } from '../NavigationContext';
 import TransitionConfigs from './StackViewTransitionConfigs';
 import { supportsImprovedSpringAnimation } from '../../utils/ReactNativeFeatures';
 
+import LinearGradient from 'react-native-linear-gradient'
+
 const emptyFunction = () => {};
 
 const { width: WINDOW_WIDTH, height: WINDOW_HEIGHT } = Dimensions.get('window');
@@ -452,19 +454,40 @@ class StackViewLayout extends React.Component {
     const responder = !gesturesEnabled ? null : this._panResponder;
 
     const handlers = gesturesEnabled ? responder.panHandlers : {};
+
+    let _containerStyle = this._getTransitionConfig().containerStyle
+    const gradientColors = _containerStyle.gradientColors
+
+    delete _containerStyle.gradientColors
+
     const containerStyle = [
       styles.container,
-      this._getTransitionConfig().containerStyle,
+      _containerStyle
     ];
 
-    return (
-      <View {...handlers} style={containerStyle}>
-        <View style={styles.scenes}>
-          {scenes.map(s => this._renderCard(s))}
+    if (gradientColors) {
+      return (
+        <LinearGradient {...handlers}
+                        colors={ gradientColors }
+                        start={ { x: 0, y: 0 } }
+                        end={ { x: 1, y: 1 } }
+                        style={ containerStyle } >
+          <View style={styles.scenes}>
+            {scenes.map(s => this._renderCard(s))}
+          </View>
+          {floatingHeader}
+        </LinearGradient>
+      );
+    } else {
+      return (
+        <View {...handlers} style={containerStyle}>
+          <View style={styles.scenes}>
+            {scenes.map(s => this._renderCard(s))}
+          </View>
+          {floatingHeader}
         </View>
-        {floatingHeader}
-      </View>
-    );
+      );
+    }
   }
 
   _getHeaderMode() {
