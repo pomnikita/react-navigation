@@ -457,8 +457,12 @@ class StackViewLayout extends React.Component {
 
     let _containerStyle = this._getTransitionConfig().containerStyle
     const gradientColors = _containerStyle.gradientColors
+    const gradientStart = _containerStyle.gradientStart
+    const gradientStop = _containerStyle.gradientStop
 
     delete _containerStyle.gradientColors
+    delete _containerStyle.gradientStart
+    delete _containerStyle.gradientStop
 
     const containerStyle = [
       styles.container,
@@ -469,8 +473,8 @@ class StackViewLayout extends React.Component {
       return (
         <LinearGradient {...handlers}
                         colors={ gradientColors }
-                        start={ { x: 0, y: 0 } }
-                        end={ { x: 1, y: 1 } }
+                        start={ gradientStart }
+                        end={ gradientStop }
                         style={ containerStyle } >
           <View style={styles.scenes}>
             {scenes.map(s => this._renderCard(s))}
