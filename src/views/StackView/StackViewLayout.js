@@ -456,13 +456,20 @@ class StackViewLayout extends React.Component {
     const handlers = gesturesEnabled ? responder.panHandlers : {};
 
     let _containerStyle = this._getTransitionConfig().containerStyle
-    const gradientColors = _containerStyle.gradientColors
-    const gradientStart = _containerStyle.gradientStart
-    const gradientStop = _containerStyle.gradientStop
 
-    delete _containerStyle.gradientColors
-    delete _containerStyle.gradientStart
-    delete _containerStyle.gradientStop
+    let gradientColors = null
+    let gradientStart = null
+    let gradientStop = null
+
+    if (_containerStyle) {
+      gradientColors = _containerStyle.gradientColors
+      gradientStart = _containerStyle.gradientStart
+      gradientStop = _containerStyle.gradientStop
+
+      delete _containerStyle.gradientColors
+      delete _containerStyle.gradientStart
+      delete _containerStyle.gradientStop
+    }
 
     const containerStyle = [
       styles.container,
